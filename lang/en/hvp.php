@@ -387,3 +387,8 @@ $string['privacy:metadata:hvp_xapi_results:response'] = 'The response the user s
 $string['privacy:metadata:hvp_xapi_results:additionals'] = 'Additional information that the H5P can send in.';
 $string['privacy:metadata:hvp_xapi_results:raw_score'] = 'Achieved score for the event.';
 $string['privacy:metadata:hvp_xapi_results:max_score'] = 'Max achievable score for the event.';
+
+// Settings - ckeditor buttons
+$string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
+$string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
+$string['editordirsupport'] = 'Content editing directionality support';
