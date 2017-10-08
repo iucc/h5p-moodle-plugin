@@ -107,6 +107,11 @@ if ($ADMIN->fulltree) {
     $PAGE->requires->js('/mod/hvp/library/js/h5p-confirmation-dialog.js', true);
     $PAGE->requires->js('/mod/hvp/library/js/settings/h5p-disable-hub.js', true);
 
+    $settings->add(new admin_setting_heading('mod_hvp/ckeditor_buttons', get_string('ckeditorbuttons', 'hvp'), ''));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi', get_string('ckeditorbutton_bidi', 'hvp'), '', 1));
+
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/editordirsupport', get_string('editordirsupport', 'hvp'), '', 1));
+
     // Skip applying css when page has already loaded, since Moodle does not.
     // allow us to require the css at this point.
     if ($PAGE->state !== 2) {

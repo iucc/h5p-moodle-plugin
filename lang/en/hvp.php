@@ -334,3 +334,8 @@ $string['licenseV1'] = 'Version 1';
 $string['licenseCC010'] = 'CC0 1.0 Universal (CC0 1.0) Public Domain Dedication';
 $string['licenseCC010U'] = 'CC0 1.0 Universal';
 $string['licenseversion'] = 'License Version';
+
+// Settings - ckeditor buttons
+$string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
+$string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
+$string['editordirsupport'] = 'Content editing directionality support';
