@@ -75,7 +75,33 @@ class xapi_result {
         // Store results.
         self::store_xapi_data($contentid, $xapijson);
 
-        // Successfully inserted xAPI result.
+        // Send xAPI staements to Moodle core standard logstore.
+        if (get_config('mod_hvp','xapistatementtolog') === '1') {
+            global $DB;
+            $h5pinstance = $DB->get_record('hvp', array('id' => $contentId));
+            if (!$cm = get_coursemodule_from_instance('hvp', $contentId)) {
+                //print_error('invalidcoursemodule');
+                \H5PCore::ajaxError('Invalid course module.');
+                return;
+            }
+            $xAPIArray = json_decode(json_encode($xAPIJson), True);
+            \mod_hvp\event\hvp_xapi_statement::create(array(
+                'objectid' => $contentId,
+                'context' => \context_module::instance($cm->id),
+                'other' => $xAPIArray,
+                'courseid' => $h5pinstance->course
+            ))->trigger();
+
+            // Debugging...
+            global $CFG;
+            if (!empty($CFG->debug) && $CFG->debug >= DEBUG_DEVELOPER) {
+                $msg = "xAPI '" . $xAPIArray['statement']['verb']['display']['en-US'] . "' statement dispatched";
+                \H5PCore::ajaxSuccess($msg);
+                http_response_code(200);
+            }
+        }
+
+        // Successfully inserted xAPI result
         \H5PCore::ajaxSuccess();
     }
 

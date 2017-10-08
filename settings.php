@@ -111,6 +111,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi', get_string('ckeditorbutton_bidi', 'hvp'), '', 1));
 
     $settings->add(new admin_setting_configcheckbox('mod_hvp/editordirsupport', get_string('editordirsupport', 'hvp'), '', 1));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/xapistatementtolog', get_string('xapistatementtolog', 'hvp'), '', 1));
 
     // Skip applying css when page has already loaded, since Moodle does not.
     // allow us to require the css at this point.

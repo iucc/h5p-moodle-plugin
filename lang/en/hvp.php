@@ -339,3 +339,4 @@ $string['licenseversion'] = 'License Version';
 $string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
 $string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
 $string['editordirsupport'] = 'Content editing directionality support';
+$string['xapistatementtolog'] = 'Send xAPI statement, also, to Moodle core standard log.';
