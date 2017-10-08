@@ -80,3 +80,30 @@
 .h5p-data-view th[role="button"].h5p-sort:hover:after {
   color: #999;
 }
+
+/* RTL Fixes - Editor */
+/*.dir-rtl .h5peditor-form {*/
+    /*direction: rtl;*/
+/*}*/
+
+/* RTL fixes - .h5p-multichoice */
+/*
+.dir-rtl .h5p-multichoice .h5p-alternative-container {
+    text-align: right;
+    padding: 0.25em 2.1em 0.25em 0.75em;
+}
+.dir-rtl .h5p-multichoice .multichoice-tip {
+    left: 0;
+    right: auto;
+}
+.dir-rtl .h5p-multichoice .h5p-answer .h5p-alternative-container:before {
+    right: 2.5em;
+    left:auto;
+}
+.dir-rtl .h5p-alternative-inner {
+    margin: 0 2em 0 1.5em;
+}
+.dir-rtl .h5p-multichoice .h5p-answer .h5p-feedback-inner {
+    text-align: right;
+}
+*/
