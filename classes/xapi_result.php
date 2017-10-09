@@ -65,8 +65,8 @@ class xapi_result {
         }
 
         if (!self::validate_xapi_data($xapijson)) {
-            \H5PCore::ajaxError('Invalid xAPI data.');
-            return;
+            //\H5PCore::ajaxError('Invalid xAPI data.');
+            //return;
         }
 
         // Delete any old results.
@@ -78,15 +78,15 @@ class xapi_result {
         // Send xAPI staements to Moodle core standard logstore.
         if (get_config('mod_hvp','xapistatementtolog') === '1') {
             global $DB;
-            $h5pinstance = $DB->get_record('hvp', array('id' => $contentId));
-            if (!$cm = get_coursemodule_from_instance('hvp', $contentId)) {
+            $h5pinstance = $DB->get_record('hvp', array('id' => $contentid));
+            if (!$cm = get_coursemodule_from_instance('hvp', $contentid)) {
                 //print_error('invalidcoursemodule');
                 \H5PCore::ajaxError('Invalid course module.');
                 return;
             }
-            $xAPIArray = json_decode(json_encode($xAPIJson), True);
+            $xAPIArray = json_decode(json_encode($xapijson), True);
             \mod_hvp\event\hvp_xapi_statement::create(array(
-                'objectid' => $contentId,
+                'objectid' => $contentid,
                 'context' => \context_module::instance($cm->id),
                 'other' => $xAPIArray,
                 'courseid' => $h5pinstance->course
