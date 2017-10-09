@@ -66,9 +66,13 @@
     function storeXAPIData(contentId, event) {
         var xAPIData;
         var instance = getH5PInstance(contentId);
+        var isChild = event.data.statement.context && event.data.statement.context.contextActivities &&
+            event.data.statement.context.contextActivities.parent &&
+            event.data.statement.context.contextActivities.parent[0] &&
+            event.data.statement.context.contextActivities.parent[0].id;
 
         // Use getXAPIData contract, needed to get children.
-        if (instance && instance.getXAPIData) {
+        if (instance && instance.getXAPIData && !isChild) {
             xAPIData = instance.getXAPIData();
         }
         else {
@@ -124,7 +128,8 @@
                 statement.context.contextActivities.parent[0].id;
 
             // Store only completed root events.
-            if (isCompleted && !isChild) {
+            //if (isCompleted && !isChild) {
+            if (isCompleted) {
                 // Get xAPI data with children if possible.
                 storeXAPIData(this.contentId, event);
             }
