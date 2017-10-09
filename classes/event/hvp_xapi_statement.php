@@ -41,11 +41,12 @@ class hvp_xapi_statement extends \core\event\base
         $this->data['objecttable'] = 'hvp';
     }
 
-    /*
+
     protected function validate_data() {
-        $this->data['action'] .= '_' . $this->data['other']->data->statement->verb->display->{'en-US'};
+        $this->data['action'] = $this->data['other']['statement']['verb']['display']['en-US'];
+        $this->data['target'] = 'attempt'; // TODO: Is this correct?
     }
-    */
+
 
     /**
      * Get URL related to the action.
