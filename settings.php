@@ -117,6 +117,9 @@ if ($ADMIN->fulltree) {
     $PAGE->requires->js('/mod/hvp/library/js/h5p-confirmation-dialog.js', true);
     $PAGE->requires->js('/mod/hvp/library/js/settings/h5p-disable-hub.js', true);
 
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/xapistoreeachinteraction', get_string('xapistoreeachinteraction', 'hvp'),
+        get_string('xapistoreeachinteraction_help', 'hvp'), 1));
+
     $settings->add(new admin_setting_heading('mod_hvp/ckeditor_buttons', get_string('ckeditorbuttons', 'hvp'), ''));
     $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi', get_string('ckeditorbutton_bidi', 'hvp'), '', 1));
 

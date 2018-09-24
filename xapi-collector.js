@@ -123,10 +123,23 @@
                 statement.context.contextActivities.parent[0] &&
                 statement.context.contextActivities.parent[0].id;
 
-            // Store only completed root events.
-            if (isCompleted && !isChild) {
-                // Get xAPI data with children if possible.
-                storeXAPIData(this.contentId, event);
+            // Store each interaction, or only at the end of the collection.
+            if (H5PIntegration.xapi.xapistoreeachinteraction === '1') {
+                if (isCompleted) {
+                    // Get xAPI data with children if possible.
+                    storeXAPIData(this.contentId, event);
+                    // Console should show only 'answered' verbs.
+                    console.debug('Interaction stored ['+ statement.verb.display['en-US'] +']');
+                } else {
+                    // Console should all non 'answered' verbs.
+                    console.debug('Interaction skipped ['+ statement.verb.display['en-US'] +']');
+                }
+            } else {
+                // Store only completed root events.
+                if (isCompleted && !isChild) {
+                    // Get xAPI data with children if possible.
+                    storeXAPIData(this.contentId, event);
+                }
             }
         });
     });

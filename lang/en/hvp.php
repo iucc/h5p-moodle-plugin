@@ -92,6 +92,8 @@ $string['contentstatefrequency'] = 'Save content state frequency';
 $string['contentstatefrequency_help'] = 'In seconds, how often do you wish the user to auto save their progress. Increase this number if you\'re having issues with many ajax requests';
 $string['enabledlrscontenttypes'] = 'Enable LRS dependent content types';
 $string['enabledlrscontenttypes_help'] = 'Makes it possible to use content types that rely upon a Learning Record Store to function properly, like the Questionnaire content type.';
+$string['xapistoreeachinteraction'] = 'Save each user interaction, as it answered.';
+$string['xapistoreeachinteraction_help'] = 'Enabling this feature will save each user interaction as it is answered, instead of saving it at the end of an activity (i.e: Interactive video)';
 
 // Admin menu.
 $string['contenttypecacheheader'] = 'Content Type Cache';

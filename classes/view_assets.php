@@ -74,6 +74,9 @@ class view_assets {
                 0 => content_user_data::load_pre_loaded_user_data($this->content['id'])
             )
         );
+        $this->settings['xapi'] = array(
+            'xapistoreeachinteraction' => get_config('mod_hvp','xapistoreeachinteraction')
+        );
 
         $this->embedtype = isset($forceembedtype) ? $forceembedtype : \H5PCore::determineEmbedType(
             $this->content['embedType'], $this->content['library']['embedTypes']
