@@ -111,6 +111,10 @@ if ($ADMIN->fulltree) {
         )
     );
 
+    $settings->add(new admin_setting_heading('mod_hvp/ckeditor_buttons', get_string('ckeditorbuttons', 'hvp'), ''));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi', get_string('ckeditorbutton_bidi', 'hvp'), '', 1));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/editordirsupport', get_string('editordirsupport', 'hvp'), '', 1));
+
     // Load js for disable hub confirmation dialog functionality.
     $PAGE->requires->js('/mod/hvp/library/js/jquery.js', true);
     $PAGE->requires->js('/mod/hvp/library/js/h5p-event-dispatcher.js', true);

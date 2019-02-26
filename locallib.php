@@ -195,7 +195,10 @@ function hvp_add_editor_assets($id = null) {
       'metadataSemantics' => $contentvalidator->getMetadataSemantics(),
       'assets' => $assets,
       // @codingStandardsIgnoreLine
-      'apiVersion' => H5PCore::$coreApi
+      'apiVersion' => H5PCore::$coreApi,
+      // TODO: WIP - rtl support
+      'bidi' => get_config('mod_hvp','bidi'),
+      'editordirsupport' => get_config('mod_hvp','editordirsupport')
     );
 
     if ($id !== null) {
