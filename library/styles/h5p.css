@@ -649,6 +649,13 @@ iframe.h5peditor-semi-fullscreen {
   float: right;
 }
 
+.h5p-dir-rtl #h5p-timeline .vco-slider .slider-item .content .text .container {
+  text-align: right;
+}
+.h5p-dir-rtl #h5p-timeline .vco-slider .slider-item .content .content-container {
+  display: inline-block !important;
+}
+
 /* h5p-interactive-video */
 .h5p-dir-rtl.h5p-interactive-video :not([aria-disabled=true]).h5p-slider .ui-slider-handle:before {
   margin: -5px -20px 0 0;
