@@ -665,3 +665,81 @@ iframe.h5peditor-semi-fullscreen {
 }.h5p-dir-rtl .h5p-question-image {
     text-align: right;
 }
+.h5p-dir-rtl .field.wizard .h5peditor-tab-a span {
+  padding-right: 45px;
+  padding-left: auto;
+}
+.h5p-interactivevideo-editor.h5p-dir-rtl .h5p-controls {
+  direction: ltr;
+}
+.h5p-interactivevideo-editor.h5p-dir-rtl .h5p-editor-table-list {
+  direction: ltr;
+}
+.h5p-dir-rtl .h5p-hub .h5p-hub-client-drop-down .icon-hub-icon:after {
+  margin-left: 1.8em;
+  left: 0;
+  right: auto;
+}
+.h5p-dir-rtl .h5p-metadata-toggler {
+  margin-right: -11px;
+  padding: 0.217rem 0.217rem 0.217rem 0.3rem;
+  border-right: none;
+}
+.h5p-interactivevideo-editor.h5p-dir-rtl .h5p-dialog-buttons {
+  left: 0;
+  right: auto;
+}
+
+/* documentation-tool */
+.h5p-dir-rtl .h5p-documentation-tool-nav-button.next:before {
+  left: -0.5em;
+  right: auto;
+  content: "\f104";
+}
+.h5p-dir-rtl .h5p-documentation-tool-nav-button.prev {
+  margin-left: 3em;
+  margin-right: auto;
+}
+.h5p-dir-rtl .h5p-documentation-tool-nav-button.prev:before {
+  content: "\f105";
+}
+.h5p-dir-rtl .h5p-documentation-tool-nav-button:before {
+  left: -0.375em;
+  right: auto;
+}
+.h5p-dir-rtl.h5p-documentation-tool .h5p-documentation-tool-nav-button {
+  left: 1em;
+  right: auto;
+}
+
+/* Drag n Drop text */
+.h5p-dir-rtl.h5p-drag-text [aria-dropeffect] {
+  padding: .1em 0 .1em 1.65em;
+}
+.h5p-dir-rtl.h5p-drag-text .h5p-drag-correct-feedback:before {
+  left: .5em;
+  right: auto;
+}
+.h5p-dir-rtl .h5p-drag-droppable-words {
+  margin: 0 !important;
+  clear: both;
+}
+.h5p-dir-rtl.h5p-drag-text .h5p-drag-wide-screen {
+  float: right;
+  border: 1px dashed #ccc;
+}
+.h5p-dir-rtl.h5p-drag-text .h5p-drag-draggable-wide-screen {
+  display: inline-block;
+}
+
+/* 360 tour */
+.h5p-dir-rtl .button-wrapper {
+  left: 20px;
+  right: auto;
+}
+
+/* Branching Scenario - switch to LTR in RTL mode, for now */
+.h5p-dir-rtl.h5peditor.h5p-branchingscenario-editor>.h5peditor-form,
+.h5p-dir-rtl .h5peditor-semi-fullscreen {
+  direction: ltr;
+}
