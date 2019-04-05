@@ -743,3 +743,29 @@ iframe.h5peditor-semi-fullscreen {
 .h5p-dir-rtl .h5peditor-semi-fullscreen {
   direction: ltr;
 }
+
+.h5p-dir-rtl .h5p-dialogcards .h5p-dialogcards-prev {
+    right: 1em;
+    left: auto;
+}
+.h5p-dir-rtl .h5p-dialogcards .h5p-dialogcards-prev:before {
+    content: "\F054";
+    margin-left: .2em;
+    margin-right: 0;
+}
+.h5p-dir-rtl .h5p-dialogcards .h5p-dialogcards-next,
+.h5p-dir-rtl .h5p-dialogcards .h5p-dialogcards-retry {
+    left: 1em;
+    right: auto;
+}
+.h5p-dir-rtl .h5p-dialogcards .h5p-dialogcards-next:after {
+    content: "\F053";
+    margin-right: .2em;
+    margin-left: 0;
+}
+
+
+.h5p-dir-rtl .h5p-slide .ui-draggable.h5p-drag-dropped {
+    right: -22%;
+    left: auto !important;
+}
