@@ -434,6 +434,25 @@ function hvp_upgrade_2018090300() {
 }
 
 /**
+ * Adds intro and introformat to hvp table
+ */
+function hvp_upgrade_2019022001() {
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    $table = new xmldb_table('hvp');
+
+    // Define field intro to be added to hvp.
+    $css = new xmldb_field('css', XMLDB_TYPE_TEXT, null, null, null, null, null, 'timemodified');
+
+    // Add field intro if not defined already.
+    if (!$dbman->field_exists($table, $css)) {
+        $dbman->add_field($table, $css);
+    }
+
+}
+
+/**
  * Hvp module upgrade function.
  *
  * @param string $oldversion The version we are upgrading from
@@ -451,7 +470,8 @@ function xmldb_hvp_upgrade($oldversion) {
         2017040500,
         2017050900,
         2017060900,
-        2018090300
+        2018090300,
+        2019022001
     ];
 
     foreach ($upgrades as $version) {

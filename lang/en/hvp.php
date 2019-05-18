@@ -420,3 +420,5 @@ $string['privacy:metadata:hvp_xapi_results:max_score'] = 'Max achievable score f
 $string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
 $string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
 $string['editordirsupport'] = 'Content editing directionality support';
+$string['styles'] = 'Styles';
+$string['css'] = 'CSS';
