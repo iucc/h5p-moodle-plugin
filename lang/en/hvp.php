@@ -431,3 +431,8 @@ $string['reuse'] = 'Reuse';
 $string['reuseContent'] = 'Reuse Content';
 $string['reuseDescription'] = 'Reuse this content.';
 $string['contentCopied'] = 'Content is copied to the clipboard';
+
+// Settings - ckeditor buttons
+$string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
+$string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
+$string['editordirsupport'] = 'Content editing directionality support';
