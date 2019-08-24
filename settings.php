@@ -112,8 +112,12 @@ if ($ADMIN->fulltree) {
     );
 
     $settings->add(new admin_setting_heading('mod_hvp/ckeditor_buttons', get_string('ckeditorbuttons', 'hvp'), ''));
-    $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi', get_string('ckeditorbutton_bidi', 'hvp'), '', 1));
-    $settings->add(new admin_setting_configcheckbox('mod_hvp/editordirsupport', get_string('editordirsupport', 'hvp'), '', 1));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/bidi',
+        get_string('ckeditorbutton_bidi', 'hvp'), get_string('ckeditorbutton_bidi_help', 'hvp'), 1));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/editordirsupport',
+        get_string('editordirsupport', 'hvp'), get_string('editordirsupport_help', 'hvp'), 1));
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/contentlang',
+        get_string('contentlang', 'hvp'), get_string('contentlang_help', 'hvp'), 1));
 
     // Load js for disable hub confirmation dialog functionality.
     $PAGE->requires->js('/mod/hvp/library/js/jquery.js', true);

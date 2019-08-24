@@ -433,6 +433,10 @@ $string['reuseDescription'] = 'Reuse this content.';
 $string['contentCopied'] = 'Content is copied to the clipboard';
 
 // Settings - ckeditor buttons
-$string['ckeditorbuttons'] = 'What extra CKEditor buttons are available';
-$string['ckeditorbutton_bidi'] = 'BIDI support (RTL & LTR buttons)';
+$string['ckeditorbuttons'] = 'RTL support';
+$string['ckeditorbutton_bidi'] = 'BIDI buttons';
+$string['ckeditorbutton_bidi_help'] = 'Add BIDI RTL & LTR buttons to all CKEditor';
 $string['editordirsupport'] = 'Content editing directionality support';
+$string['editordirsupport_help'] = 'Use authoring user preferred Moodle language for content editing UI directionality.';
+$string['contentlang'] = 'Use content directionality';
+$string['contentlang_help'] = 'When checked, viewing user content directionality is based on content language, otherwise based on Moodle user calculated (system/course/user) language preferences.';

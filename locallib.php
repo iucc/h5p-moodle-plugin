@@ -55,6 +55,7 @@ function hvp_get_core_settings($context) {
             $savefreq = get_config('mod_hvp', 'content_state_frequency');
         }
     }
+    $contentlang = get_config('mod_hvp','contentlang');
 
     $core = \mod_hvp\framework::instance('core');
 
@@ -76,7 +77,8 @@ function hvp_get_core_settings($context) {
         'crossorigin' => isset($CFG->mod_hvp_crossorigin) ? $CFG->mod_hvp_crossorigin : null,
         'libraryConfig' => $core->h5pF->getLibraryConfig(),
         'pluginCacheBuster' => hvp_get_cache_buster(),
-        'libraryUrl' => $basepath . 'mod/hvp/library/js'
+        'libraryUrl' => $basepath . 'mod/hvp/library/js',
+        'contentlang' => $contentlang
     );
 
     return $settings;

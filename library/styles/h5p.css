@@ -858,3 +858,16 @@ iframe.h5peditor-semi-fullscreen {
     right: -22%;
     left: auto !important;
 }
+
+/* Content reset dialog */
+.h5p-dir-rtl .h5p-popup-dialog .h5p-close:after {
+    right: auto;
+    left: 0;
+}
+.h5p-dir-rtl .h5p-embed-dialog .h5p-inner,
+.h5p-dir-rtl .h5p-reuse-dialog .h5p-inner,
+.h5p-dir-rtl .h5p-content-user-data-reset-dialog .h5p-inner {
+    direction: rtl;
+    right: 0;
+    left: auto;
+}
