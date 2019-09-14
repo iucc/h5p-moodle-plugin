@@ -140,6 +140,8 @@ H5P.init = function (target) {
     // Create new instance.
     var instance = H5P.newRunnable(library, contentId, $container, true, {standalone: true});
 
+    H5P.offlineRequestQueue = new H5P.OfflineRequestQueue({instance: instance});
+
     // Check if we should add and display a fullscreen button for this H5P.
     if (contentData.fullScreen == 1 && H5P.fullscreenSupported) {
       H5P.jQuery(
@@ -678,6 +680,97 @@ H5P.fullScreen = function ($element, instance, exitCallback, body, forceSemiFull
   }
 };
 
+(function () {
+  /**
+   * Helper for adding a query parameter to an existing path that may already
+   * contain one or a hash.
+   *
+   * @param {string} path
+   * @param {string} parameter
+   * @return {string}
+   */
+  H5P.addQueryParameter = function (path, parameter) {
+    let newPath, secondSplit;
+    const firstSplit = path.split('?');
+    if (firstSplit[1]) {
+      // There is already an existing query
+      secondSplit = firstSplit[1].split('#');
+      newPath = firstSplit[0] + '?' + secondSplit[0] + '&';
+    }
+    else {
+      // No existing query, just need to take care of the hash
+      secondSplit = firstSplit[0].split('#');
+      newPath = secondSplit[0] + '?';
+    }
+    newPath += parameter;
+    if (secondSplit[1]) {
+      // Add back the hash
+      newPath += '#' + secondSplit[1];
+    }
+    return newPath;
+  };
+
+  /**
+   * Helper for setting the crossOrigin attribute + the complete correct source.
+   * Note: This will start loading the resource.
+   *
+   * @param {Element} element DOM element, typically img, video or audio
+   * @param {Object} source File object from parameters/json_content (created by H5PEditor)
+   * @param {number} contentId Needed to determine the complete correct file path
+   */
+  H5P.setSource = function (element, source, contentId) {
+    let path = source.path;
+
+    const crossOrigin = H5P.getCrossOrigin(source);
+    if (crossOrigin) {
+      element.crossOrigin = crossOrigin;
+
+      if (H5PIntegration.crossoriginCacheBuster) {
+        // Some sites may want to add a cache buster in case the same resource
+        // is used elsewhere without the crossOrigin attribute
+        path = H5P.addQueryParameter(path, H5PIntegration.crossoriginCacheBuster);
+      }
+    }
+    else {
+      // In case this element has been used before.
+      element.removeAttribute('crossorigin');
+    }
+
+    element.src = H5P.getPath(path, contentId);
+  };
+
+  /**
+   * Check if the given path has a protocol.
+   *
+   * @private
+   * @param {string} path
+   * @return {string}
+   */
+  var hasProtocol = function (path) {
+    return path.match(/^[a-z0-9]+:\/\//i);
+  };
+
+  /**
+   * Get the crossOrigin policy to use for img, video and audio tags on the current site.
+   *
+   * @param {Object|string} source File object from parameters/json_content - Can also be URL(deprecated usage)
+   * @returns {string|null} crossOrigin attribute value required by the source
+   */
+  H5P.getCrossOrigin = function (source) {
+    if (typeof source !== 'object') {
+      // Deprecated usage.
+      return H5PIntegration.crossorigin && H5PIntegration.crossoriginRegex && source.match(H5PIntegration.crossoriginRegex) ? H5PIntegration.crossorigin : null;
+    }
+
+    if (H5PIntegration.crossorigin && !hasProtocol(source.path)) {
+      // This is a local file, use the local crossOrigin policy.
+      return H5PIntegration.crossorigin;
+      // Note: We cannot use this for all external sources since we do not know
+      // each server's individual policy. We could add support for a list of
+      // external sources and their policy later on.
+    }
+  };
+
 /**
  * Find the path to the content files based on the id of the content.
  * Also identifies and returns absolute paths.
@@ -690,10 +783,6 @@ H5P.fullScreen = function ($element, instance, exitCallback, body, forceSemiFull
  *   Complete URL to path.
  */
 H5P.getPath = function (path, contentId) {
-  var hasProtocol = function (path) {
-    return path.match(/^[a-z0-9]+:\/\//i);
-  };
-
   if (hasProtocol(path)) {
     return path;
   }
@@ -724,6 +813,7 @@ H5P.getPath = function (path, contentId) {
 
   return prefix + '/' + path;
 };
+})();
 
 /**
  * THIS FUNCTION IS DEPRECATED, USE getPath INSTEAD
@@ -862,7 +952,7 @@ H5P.newRunnable = function (library, contentId, $attachTo, skipResize, extras) {
   if ($attachTo !== undefined) {
     $attachTo.toggleClass('h5p-standalone', standalone);
     // Viewing user RTL support.
-    if (H5PIntegration.contentlang == true) {
+    if (H5PIntegration.contentlang == true && typeof instance.contentData != 'undefined') {
     var contentlang = instance.contentData.metadata.defaultLanguage;
     if (contentlang == 'he' || contentlang == 'ar') {
       $attachTo.toggleClass('lang-' + contentlang + ' h5p-dir-rtl');
@@ -2093,13 +2183,17 @@ H5P.setFinished = function (contentId, score, maxScore, time) {
     };
 
     // Post the results
-    H5P.jQuery.post(H5PIntegration.ajax.setFinished, {
+    const data = {
       contentId: contentId,
       score: score,
       maxScore: maxScore,
       opened: toUnix(H5P.opened[contentId]),
       finished: toUnix(new Date()),
       time: time
+    };
+    H5P.jQuery.post(H5PIntegration.ajax.setFinished, data)
+      .fail(function () {
+        H5P.offlineRequestQueue.add(H5PIntegration.ajax.setFinished, data);
     });
   }
 };
@@ -2328,19 +2422,6 @@ H5P.createTitle = function (rawTitle, maxLength) {
         }
       });
     }
-  };
-
-  /**
-   * Get crossorigin option that is set for site. Usefull for setting crossorigin policy for elements.
-   *
-   * @returns {string|null} Returns the string that should be set as crossorigin policy for elements or null if
-   * no policy is set.
-   */
-  H5P.getCrossOrigin = function (url) {
-    var crossorigin = H5PIntegration.crossorigin;
-    var urlRegex = H5PIntegration.crossoriginRegex;
-
-    return crossorigin && urlRegex && url.match(urlRegex) ? crossorigin : null;
   };
 
   /**
@@ -2574,7 +2655,7 @@ H5P.createTitle = function (rawTitle, maxLength) {
     // Update file URLs and reset content Ids
     recursiveUpdate(clipboardData.specific, function (path) {
       var isTmpFile = (path.substr(-4, 4) === '#tmp');
-      if (!isTmpFile && clipboardData.contentId) {
+      if (!isTmpFile && clipboardData.contentId && !path.match(/^https?:\/\//i)) {
         // Comes from existing content
 
         if (H5PEditor.contentId) {
