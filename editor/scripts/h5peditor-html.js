@@ -337,6 +337,12 @@ ns.Html.prototype.appendTo = function ($wrapper) {
       return new CKEDITOR.dom.element(that.$item[0]);
     };
 
+    // Set ckEditor language to match current editing user preferred UI language
+    // set by the hosting LMS (Moodle)
+    // (Which will affect RTL/LTR and Alignment toolbar buttons inline style modifications.
+    //parentlang = window.parent.document.dir;
+    CKEDITOR.config.language = window.parent.document.getElementsByTagName('html')[0].getAttribute('lang');
+
     ns.Html.current = that;
     ckConfig.width = this.offsetWidth - 8; // Avoid miscalculations
     that.ckeditor = CKEDITOR.replace(this, ckConfig);
