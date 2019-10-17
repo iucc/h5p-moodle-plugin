@@ -66,6 +66,11 @@ if ($ADMIN->fulltree) {
             1)
     );
 
+    // Should we save and grade each interaction inside an Interactive Video or a Presentation?
+    // when xAPI verb = answered
+    $settings->add(new admin_setting_configcheckbox('mod_hvp/saveeachinteraction',
+        get_string('saveeachinteraction', 'hvp'), get_string('saveeachinteraction_help', 'hvp'), 1));
+
     $choices = array(
         H5PDisplayOptionBehaviour::NEVER_SHOW => get_string('displayoptiondownloadnever', 'hvp'),
         H5PDisplayOptionBehaviour::ALWAYS_SHOW => get_string('displayoptiondownloadalways', 'hvp'),

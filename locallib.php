@@ -56,6 +56,7 @@ function hvp_get_core_settings($context) {
         }
     }
     $contentlang = get_config('mod_hvp','contentlang');
+    $saveeachinteraction = get_config('mod_hvp','saveeachinteraction');
 
     $core = \mod_hvp\framework::instance('core');
 
@@ -80,7 +81,8 @@ function hvp_get_core_settings($context) {
         'libraryConfig' => $core->h5pF->getLibraryConfig(),
         'pluginCacheBuster' => hvp_get_cache_buster(),
         'libraryUrl' => $basepath . 'mod/hvp/library/js',
-        'contentlang' => $contentlang
+        'contentlang' => $contentlang,
+        'saveeachinteraction' => $saveeachinteraction
     );
 
     return $settings;
