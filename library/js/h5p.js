@@ -367,7 +367,18 @@ H5P.init = function (target) {
 
     // Resize content.
     H5P.trigger(instance, 'resize');
+
+    // Logic for hiding focus effects when using mouse
+    $element.addClass('using-mouse');
+    $element.on('mousedown keydown keyup', function (event) {
+      $element.toggleClass('using-mouse', event.type === 'mousedown');
+    });
+
+    if (H5P.externalDispatcher) {
+      H5P.externalDispatcher.trigger('initialized');
+    }
   });
+
   // RTL support in iframe, based on Moodle calculated user language
   if (H5PIntegration.contentlang == false) {
     var rtlclss = '';
@@ -375,6 +386,7 @@ H5P.init = function (target) {
       rtlclss = 'h5p-dir-rtl';
     }
   }
+
   // Insert H5Ps that should be in iframes.
   H5P.jQuery('iframe.h5p-iframe:not(.h5p-initialized)', target).each(function () {
     var contentId = H5P.jQuery(this).addClass('h5p-initialized').data('content-id');
@@ -771,48 +783,48 @@ H5P.fullScreen = function ($element, instance, exitCallback, body, forceSemiFull
     }
   };
 
-/**
- * Find the path to the content files based on the id of the content.
- * Also identifies and returns absolute paths.
- *
- * @param {string} path
- *   Relative to content folder or absolute.
- * @param {number} contentId
- *   ID of the content requesting the path.
- * @returns {string}
- *   Complete URL to path.
- */
-H5P.getPath = function (path, contentId) {
-  if (hasProtocol(path)) {
-    return path;
-  }
-
-  var prefix;
-  var isTmpFile = (path.substr(-4,4) === '#tmp');
-  if (contentId !== undefined && !isTmpFile) {
-    // Check for custom override URL
-    if (H5PIntegration.contents !== undefined &&
-        H5PIntegration.contents['cid-' + contentId]) {
-      prefix = H5PIntegration.contents['cid-' + contentId].contentUrl;
+  /**
+   * Find the path to the content files based on the id of the content.
+   * Also identifies and returns absolute paths.
+   *
+   * @param {string} path
+   *   Relative to content folder or absolute.
+   * @param {number} contentId
+   *   ID of the content requesting the path.
+   * @returns {string}
+   *   Complete URL to path.
+   */
+  H5P.getPath = function (path, contentId) {
+    if (hasProtocol(path)) {
+      return path;
     }
-    if (!prefix) {
-      prefix = H5PIntegration.url + '/content/' + contentId;
+
+    var prefix;
+    var isTmpFile = (path.substr(-4,4) === '#tmp');
+    if (contentId !== undefined && !isTmpFile) {
+      // Check for custom override URL
+      if (H5PIntegration.contents !== undefined &&
+          H5PIntegration.contents['cid-' + contentId]) {
+        prefix = H5PIntegration.contents['cid-' + contentId].contentUrl;
+      }
+      if (!prefix) {
+        prefix = H5PIntegration.url + '/content/' + contentId;
+      }
     }
-  }
-  else if (window.H5PEditor !== undefined) {
-    prefix = H5PEditor.filesPath;
-  }
-  else {
-    return;
-  }
+    else if (window.H5PEditor !== undefined) {
+      prefix = H5PEditor.filesPath;
+    }
+    else {
+      return;
+    }
 
-  if (!hasProtocol(prefix)) {
-    // Use absolute urls
-    prefix = window.location.protocol + "//" + window.location.host + prefix;
-  }
+    if (!hasProtocol(prefix)) {
+      // Use absolute urls
+      prefix = window.location.protocol + "//" + window.location.host + prefix;
+    }
 
-  return prefix + '/' + path;
-};
+    return prefix + '/' + path;
+  };
 })();
 
 /**
@@ -1048,7 +1060,7 @@ H5P.t = function (key, vars, ns) {
 H5P.Dialog = function (name, title, content, $element) {
   /** @alias H5P.Dialog# */
   var self = this;
-  var $dialog = H5P.jQuery('<div class="h5p-popup-dialog h5p-' + name + '-dialog">\
+  var $dialog = H5P.jQuery('<div class="h5p-popup-dialog h5p-' + name + '-dialog" role="dialog" tabindex="-1">\
                               <div class="h5p-inner">\
                                 <h2>' + title + '</h2>\
                                 <div class="h5p-scroll-content">' + content + '</div>\
@@ -1056,16 +1068,26 @@ H5P.Dialog = function (name, title, content, $element) {
                               </div>\
                             </div>')
     .insertAfter($element)
-    .click(function () {
+    .click(function (e) {
+      if (e && e.originalEvent && e.originalEvent.preventClosing) {
+        return;
+      }
+
       self.close();
     })
     .children('.h5p-inner')
-      .click(function () {
-        return false;
+      .click(function (e) {
+        e.originalEvent.preventClosing = true;
       })
       .find('.h5p-close')
         .click(function () {
           self.close();
+        })
+        .keypress(function (e) {
+          if (e.which === 13 || e.which === 32) {
+            self.close();
+            return false;
+          }
         })
         .end()
       .find('a')
@@ -1086,6 +1108,7 @@ H5P.Dialog = function (name, title, content, $element) {
       $dialog.addClass('h5p-open'); // Fade in
       // Triggering an event, in case something has to be done after dialog has been opened.
       H5P.jQuery(self).trigger('dialog-opened', [$dialog]);
+      $dialog.focus();
     }, 1);
   };
 
@@ -1097,6 +1120,8 @@ H5P.Dialog = function (name, title, content, $element) {
     setTimeout(function () {
       $dialog.remove();
       H5P.jQuery(self).trigger('dialog-closed', [$dialog]);
+      $element.attr('tabindex', '-1');
+      $element.focus();
     }, 200);
   };
 };
@@ -1377,11 +1402,11 @@ H5P.openEmbedDialog = function ($element, embedCode, resizeCode, size, instance)
       var $expander = H5P.jQuery(this);
       var $content = $expander.next();
       if ($content.is(':visible')) {
-        $expander.removeClass('h5p-open').text(H5P.t('showAdvanced'));
+        $expander.removeClass('h5p-open').text(H5P.t('showAdvanced')).attr('aria-expanded', 'true');
         $content.hide();
       }
       else {
-        $expander.addClass('h5p-open').text(H5P.t('hideAdvanced'));
+        $expander.addClass('h5p-open').text(H5P.t('hideAdvanced')).attr('aria-expanded', 'false');
         $content.show();
       }
       $dialog.find('.h5p-embed-code-container').each(function () {
@@ -1392,6 +1417,7 @@ H5P.openEmbedDialog = function ($element, embedCode, resizeCode, size, instance)
     $dialog.find('.h5p-expander').click(expand).keypress(function (event) {
       if (event.keyCode === 32) {
         expand.apply(this);
+        return false;
       }
     });
   }).on('dialog-closed', function () {
@@ -2194,7 +2220,7 @@ H5P.setFinished = function (contentId, score, maxScore, time) {
     H5P.jQuery.post(H5PIntegration.ajax.setFinished, data)
       .fail(function () {
         H5P.offlineRequestQueue.add(H5PIntegration.ajax.setFinished, data);
-    });
+      });
   }
 };
 
